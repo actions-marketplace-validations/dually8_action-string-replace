@@ -1,0 +1,20 @@
+name: 'String Replace'
+description: 'Replace bad characters in a string'
+author: 'CJ Coffey'
+branding:
+  color: red
+  icon: tool
+inputs:
+  string:
+    description: 'String to clean'
+    required: true
+  delimiter:
+    description: 'Development deployment path'
+    required: false
+    default: ''
+outputs:
+  output:
+    description: 'The cleaned string'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

@@ -1,0 +1,52 @@
+name: 'Build, Test, and Create Artifact'
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+  push:
+    branches:
+      - main
+      - 'releases/*'
+    paths-ignore:
+      - "**.md"
+  workflow_dispatch:
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm run all
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        id: clean-string
+        with:
+          string: 'feat/my-awesome-feature'
+          delimiter: '_'
+
+      - name: Test workflow output
+        run: |
+          if [ ${{ steps.clean-string.outputs.output }} == 'feat_my-awesome-feature' ]; then
+            echo "We did it!"
+          else
+            echo "oh no :("
+            exit 1
+          fi
+
+  create-artifact: # create an artifact for release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+          npm run all
+      - uses: actions/upload-artifact@v3.1.0
+        with:
+          name: dist-${{ github.run_id }}
+          path: dist/
