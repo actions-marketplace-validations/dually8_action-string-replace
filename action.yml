@@ -1,9 +1,9 @@
-name: 'String Replace'
+name: 'Artifact String Cleaner'
 description: 'Replace bad characters in a string'
 author: 'CJ Coffey'
 branding:
   color: red
-  icon: tool
+  icon: activity
 inputs:
   string:
     description: 'String to clean'
